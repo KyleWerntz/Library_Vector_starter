@@ -46,8 +46,10 @@ bool EXPECT_EQ(T expectedVal, U actualVal,string testnumb = "", int pts=ONE_POIN
 //this code cadged from stack overflow
 bool diff_files(string testoutput,string correctfile, string testnumb = "" ){
 	const int SMALL_BUFFER = 512;
-	if (testoutput.length()== 0 || correctfile.length()==0)
+	if (testoutput.length()== 0 || correctfile.length()==0)	{
+		//cout << "proc" << endl;
 		return false;
+	}
 
 	//build shell command
 	string command ="diff "+  testoutput + " " + correctfile;
@@ -55,8 +57,10 @@ bool diff_files(string testoutput,string correctfile, string testnumb = "" ){
 	FILE *in;
 	char buff[SMALL_BUFFER];
 
-	if(!(in = popen(command.c_str(), "r")))
+	if(!(in = popen(command.c_str(), "r")))	{
+		//cout << "proc" << endl;
 		return false;
+	}
 
 	if (fgets(buff, sizeof(buff), in)==NULL)
 		return true;
@@ -149,8 +153,9 @@ void testfileIO(){
 	
 	//compare the 2 files (this could fail if you have an extra linefeed in your file)
 	//compare the 2 files (this could fail if you have an extra linefeed in your file)
-	if (does_file_exist(TMP_FILE) && does_file_exist(PATRONFILE))
+	if (does_file_exist(TMP_FILE) && does_file_exist(PATRONFILE))	{
 		EXPECT_EQ(true,diff_files(PATRONFILE, TMP_FILE),"10",FIVE_POINTS);	
+	}
 }
 
 /*
@@ -163,7 +168,6 @@ void testnumbBooksAndnumpPatrons(){
 	} catch (...) {
 		cout<<"Threw exception in numbBooks"<<endl;
 	}
-	
 	EXPECT_EQ(20, n,"tnbnp1",THREE_POINTS);
 
 	try{
