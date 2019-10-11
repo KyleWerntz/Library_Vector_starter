@@ -168,6 +168,7 @@ void testnumbBooksAndnumpPatrons(){
 	} catch (...) {
 		cout<<"Threw exception in numbBooks"<<endl;
 	}
+
 	EXPECT_EQ(20, n,"tnbnp1",THREE_POINTS);
 
 	try{

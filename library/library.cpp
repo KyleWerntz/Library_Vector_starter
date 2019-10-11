@@ -55,7 +55,7 @@ void reloadAllData(){
  */
 int checkout(int bookid, int patronid){
 
-	//reloadAllData();
+	reloadAllData();
 	//cout << "b size: " << books.size() << endl;
 
 	int bookLocation = -1;
@@ -98,6 +98,14 @@ int checkout(int bookid, int patronid){
 		patrons[patronLocation].number_books_checked_out++;
 	}
 
+	char bookFile[BOOKFILE.size() + 1];
+	copy(BOOKFILE.begin(), BOOKFILE.end(), bookFile);
+	saveBooks(books, bookFile);
+
+	char patronFile[PATRONFILE.size() + 1];
+	copy(PATRONFILE.begin(), PATRONFILE.end(), patronFile);
+	savePatrons(patrons, patronFile);
+
 	return SUCCESS;
 }
 
@@ -115,7 +123,7 @@ int checkout(int bookid, int patronid){
  */
 int checkin(int bookid){
 
-	//reloadAllData();
+	reloadAllData();
 
 	int patronid = -1;
 
@@ -135,11 +143,24 @@ int checkin(int bookid){
 		}
 	}
 
-	for (int i = 0; i < patrons.size(); i++)	{
-		if (patronid == patrons[i].patron_id)	{
-			patrons[i].number_books_checked_out--;
+	if (patronid != -1)	{
+		for (int i = 0; i < patrons.size(); i++)	{
+			if (patronid == patrons[i].patron_id)	{
+				patrons[i].number_books_checked_out--;
+			}
 		}
 	}
+	else	{
+		return BOOK_NOT_IN_COLLECTION;
+	}
+
+	char bookFile[BOOKFILE.size() + 1];
+	copy(BOOKFILE.begin(), BOOKFILE.end(), bookFile);
+	saveBooks(books, bookFile);
+
+	char patronFile[PATRONFILE.size() + 1];
+	copy(PATRONFILE.begin(), PATRONFILE.end(), patronFile);
+	savePatrons(patrons, patronFile);
 
 	return SUCCESS;
 }
@@ -155,6 +176,8 @@ int checkin(int bookid){
  */
 int enroll(std::string &name){
 
+	reloadAllData();
+
 	patron new_patron = patron();
 
 	new_patron.name = name;
@@ -162,6 +185,10 @@ int enroll(std::string &name){
 	new_patron.patron_id = new_id;
 
 	patrons.push_back(new_patron);
+
+	char patronFile[PATRONFILE.size() + 1];
+	copy(PATRONFILE.begin(), PATRONFILE.end(), patronFile);
+	savePatrons(patrons, patronFile);
 
 	return new_id;
 }
@@ -172,6 +199,8 @@ int enroll(std::string &name){
  * 
  */
 int numbBooks(){
+	//reloadAllData();
+	//cout << books.size() << endl;
 	return books.size();
 }
 
@@ -180,6 +209,7 @@ int numbBooks(){
  * (ie. if 3 patrons returns 3)
  */
 int numbPatrons(){
+	reloadAllData();
 	return patrons.size();
 }
 
